@@ -1,3 +1,2 @@
 # web
 BSIT GROUP PROJECT REPOSITORY
-member 1
