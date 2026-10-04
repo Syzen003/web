@@ -1,72 +1,47 @@
-document.addEventListener("DOMContentLoaded", ()=> {
-    const nav1 = document.querySelector(".nav1");
-    const nav2 = document.querySelector(".nav2");
-    const nav3 = document.querySelector(".nav3");
-    const nav4 = document.querySelector(".nav4");
-    const nav5 = document.querySelector(".nav5");
-    const nav6 = document.querySelector(".nav6");
+document.addEventListener("DOMContentLoaded", () => {
     const date = new Date();
-
-    nav1.addEventListener("click", (event)=> {
-        event.preventDefault();
-        nav1.classList.add('active');
-        nav2.classList.remove('active');
-        nav3.classList.remove('active');
-        nav4.classList.remove('active');
-        nav5.classList.remove('active');
-        nav6.classList.remove('active');
-    });
-    nav2.addEventListener("click", (event)=> {
-        event.preventDefault();
-        nav2.classList.add('active');
-        nav1.classList.remove('active');
-        nav3.classList.remove('active');
-        nav4.classList.remove('active');
-        nav5.classList.remove('active');
-        nav6.classList.remove('active');
-    });
-    nav3.addEventListener("click", (event)=> {
-        event.preventDefault();
-        nav3.classList.add('active');
-        nav2.classList.remove('active');
-        nav1.classList.remove('active');
-        nav4.classList.remove('active');
-        nav5.classList.remove('active');
-        nav6.classList.remove('active');
-    });
-    nav4.addEventListener("click", (event)=> {
-        event.preventDefault();
-        nav4.classList.add('active');
-        nav2.classList.remove('active');
-        nav3.classList.remove('active');
-        nav1.classList.remove('active');
-        nav5.classList.remove('active');
-        nav6.classList.remove('active');
-    });
-    nav5.addEventListener("click", (event)=> {
-        event.preventDefault();
-        nav5.classList.add('active');
-        nav2.classList.remove('active');
-        nav3.classList.remove('active');
-        nav4.classList.remove('active');
-        nav1.classList.remove('active');
-        nav6.classList.remove('active');
-    });
-    nav6.addEventListener("click", (event)=> {
-        event.preventDefault();
-        nav6.classList.add('active');
-        nav2.classList.remove('active');
-        nav3.classList.remove('active');
-        nav4.classList.remove('active');
-        nav5.classList.remove('active');
-        nav1.classList.remove('active');
-    });
-
+    const bgpic = document.querySelector(".bgpic");
+    const close = document.querySelector(".close a");
+    const fileInput = document.getElementById("fileInput");
+    const bgImg = document.getElementById("bg");
     const options = { month: "long", day: "numeric", year: "numeric" };
     const formattedDate = date.toLocaleDateString("en-US", options);
-
     const dateSpan = document.getElementById("dateToday");
+    const monthPicker = document.getElementById("monthPicker");
+    const rangeDisplay = document.getElementById("rangeDisplay");
+
+    fileInput.addEventListener("change", () => {
+        const file = fileInput.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                bgImg.src = e.target.result;
+                bgpic.classList.add("active");
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+
+    close.addEventListener("click", (e) => {
+        e.preventDefault();
+        bgpic.classList.remove("active");
+    });
+
     if (dateSpan) {
         dateSpan.textContent = formattedDate;
     }
+    monthPicker.addEventListener("change", () => {
+        const value = monthPicker.value;
+        if (value) {
+            const [year, month] = value.split("-");
+            const firstDay = new Date(year, month - 1, 1);
+            const lastDay = new Date(year, month, 0);
+
+            const options = { month: "short", day: "numeric", year: "numeric" };
+            const startText = firstDay.toLocaleDateString("en-US", options);
+            const endText = lastDay.toLocaleDateString("en-US", options);
+
+            rangeDisplay.textContent = `${startText} - ${endText}`;
+        }
+    });
 });
